@@ -31,7 +31,7 @@ if(isset($_POST['registerButton'])) {
 
 	$wasSuccessful = $account->register($username, $firstName, $lastName, $email, $email2, $password, $password2);
 
-	if($wasSuccessful) {
+	if($wasSuccessful == true) {
 		header("Location: index.php");
 	}
 }
