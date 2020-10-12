@@ -1,42 +1,31 @@
-<?php 
+<?php include("includes/header.php");  ?>
+            
 
-include("includes/config.php");
+    <h1 class="pageHeadingBig">You might also like</h1>
 
-// session_destroy();
-
-if(isset($_SESSION['userLoggedIn'])) {
-    $userLoggedIn = $_SESSION['userLoggedIn'];
-}
-
-else {
-    header("Location: register.php");
-}
-
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to spotify clone!</title>
-
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-
-
-    <div id="mainContainer">
-
-        <div id="topContainer">
-
-           <?php include("includes/navBarContainer.php"); ?>
-
-        </div>
-
-        <?php include("includes/nowPlayingBar.php"); ?>
-    </div>
+    <div class="gridViewContainer">
     
+        <?php 
+        $albumQuery = mysqli_query($con, "SELECT * FROM albums ORDER BY RAND() LIMIT 10");
 
-</body>
-</html>
+        while($row = mysqli_fetch_array($albumQuery)) {
+            echo "<div class='gridViewItem'>
+
+            <img src='" .$row['artworkPath'] . "'>
+
+            <div class='gridViewInfo'>"
+            . $row['title'] .
+            "</div>
+
+            </div>";
+        }
+        ?>
+
+    </div>
+
+
+
+<?php include("includes/footer.php");  ?>
+
+
+            
