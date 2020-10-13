@@ -25,8 +25,28 @@ $(document).ready(function() {
 
 function setTrack(trackId, newPlayList, play) {
     
-    audioElement.setTrack("assets/music/Ava Max - Kings & Queens [Official Music Video].mp3");
-  
+    $.post("includes/handlers/ajax/getSongJson.php", { songId: trackId}, function(data) {
+        
+        var track = JSON.parse(data);
+        
+        $(".trackName span").text(track.title);
+        
+        $.post("includes/handlers/ajax/getArtistJson.php", { artistId: track.artist}, function(data) {
+            var artist = JSON.parse(data);
+
+            $(".artistName span").text(artist.name);
+        });
+
+        $.post("includes/handlers/ajax/getAlbumJson.php", { albumId: track.album}, function(data) {
+            var album = JSON.parse(data);
+
+            $(".albumLink img").attr("src", album.artworkPath);
+        });
+        
+        audioElement.setTrack(track.path);
+        audioElement.play();
+    });
+
     if(play == true) {
         audioElement.play();
     }
@@ -60,15 +80,15 @@ function pauseSong() {
         <div id="nowPlayingLeft">
             <div class="content">
                 <span class="albumLink">
-                    <img src="https://jooinn.com/images/square-4.jpg" alt="" class="albumArtwork">
+                    <img src="" alt="" class="albumArtwork">
                 </span>
 
                 <div class="trackInfo">
                     <span class="trackName">
-                        <span>Hellow</span>
+                        <span></span>
                     </span>
                     <span class="artistName">
-                        <span>Artist Name</span>
+                        <span></span>
                     </span>
                 </div>
             </div>
