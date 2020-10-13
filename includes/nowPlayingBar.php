@@ -19,11 +19,30 @@ $jsonArray = json_encode($resultArray);
 $(document).ready(function() {
     currentPlayList = <?php echo $jsonArray; ?>;
     audioElement = new Audio();
+    setTrack(currentPlayList[0], currentPlayList, false);
 });
 
 
 function setTrack(trackId, newPlayList, play) {
     
+    audioElement.setTrack("assets/music/Ava Max - Kings & Queens [Official Music Video].mp3");
+  
+    if(play == true) {
+        audioElement.play();
+    }
+    
+}
+
+function playSong() {
+    $(".controlButton.play").hide();
+    $(".controlButton.pause").show();
+    audioElement.play();
+}
+
+function pauseSong() {
+    $(".controlButton.play").show();
+    $(".controlButton.pause").hide();
+    audioElement.pause();
 }
 
 </script>
@@ -71,11 +90,11 @@ function setTrack(trackId, newPlayList, play) {
                 <img src="assets/images/icons/previous.png" alt="Previous">
             </button>
 
-            <button class="controlButton play" title="Play button">
+            <button class="controlButton play" title="Play button" onClick="playSong()">
                 <img src="assets/images/icons/play.png" alt="Play">
             </button>
 
-            <button class="controlButton pause" title="Pause button" style="display:none;">
+            <button class="controlButton pause" title="Pause button" style="display:none;" onClick="pauseSong()">
                 <img src="assets/images/icons/pause.png" alt="Pause">
             </button>
 

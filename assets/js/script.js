@@ -1,6 +1,6 @@
 
 
-var currentPlayList = array();
+var currentPlayList = [];
 var audioElement;
 
 
@@ -14,5 +14,11 @@ function Audio() {
         this.audio.src = src;
     }
 
+    this.play = function() {
+        this.audio.play();
+    }
 
+    this.pause = function() {
+        this.audio.pause();
+    }
 }
