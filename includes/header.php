@@ -1,7 +1,9 @@
 <?php 
 
 include("includes/config.php");
-
+include("includes/classes/Artist.php");
+include("includes/classes/Album.php");
+include("includes/classes/Song.php");
 // session_destroy();
 
 if(isset($_SESSION['userLoggedIn'])) {
@@ -22,6 +24,9 @@ else {
     <title>Welcome to spotify clone!</title>
 
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    
 </head>
 <body>
 
