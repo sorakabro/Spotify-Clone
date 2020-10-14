@@ -1,6 +1,8 @@
 <?php
 include("../../config.php");
 
+//Query to database taking data from album specific albumId and put it into array and json encode it.
+
 if(isset($_POST['albumId'])) {
     $albumId = $_POST['albumId'];
 

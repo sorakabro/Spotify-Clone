@@ -4,10 +4,13 @@
         private $con;
         private $id;
 
+
         public function __construct($con, $id) {
             $this->con = $con;
             $this->id = $id;
         }
+
+        //function for getting Artist name from database
 
         public function getName() {
             $artistQuery = mysqli_query($this->con, "SELECT name FROM artists WHERE id='$this->id'");

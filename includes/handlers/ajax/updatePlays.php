@@ -1,6 +1,9 @@
 <?php
 include("../../config.php");
 
+
+//add 1 play for each time a song is played
+
 if(isset($_POST['songId'])) {
     $songId = $_POST['songId'];
 

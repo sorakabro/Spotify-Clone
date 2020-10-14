@@ -13,6 +13,8 @@ $album = new Album($con, $albumId);
 $artist = $album->getArtist();
 
 
+// Showing everything regarding album view in the app
+
 ?>
 
 <div class="entityInfo">
@@ -34,6 +36,8 @@ $artist = $album->getArtist();
     <ul class="trackList">
         
         <?php
+
+        // Showing the album picture, Trackname and artist name with a foreach loop
 
         $songIdArray = $album->getSongIds();
 

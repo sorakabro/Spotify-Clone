@@ -6,6 +6,9 @@
     <div class="gridViewContainer">
     
         <?php 
+
+        //Database query to show random 10 albums
+
         $albumQuery = mysqli_query($con, "SELECT * FROM albums ORDER BY RAND() LIMIT 10");
 
         while($row = mysqli_fetch_array($albumQuery)) {

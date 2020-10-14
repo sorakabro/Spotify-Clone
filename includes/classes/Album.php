@@ -8,6 +8,8 @@
         private $genre;
         private $artworkPath;
 
+        //Database queries for getting data from albums and then post it out in functions
+
         public function __construct($con, $id) {
             $this->con = $con;
             $this->id = $id;

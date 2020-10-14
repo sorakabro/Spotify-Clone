@@ -1,6 +1,8 @@
 <?php
 include("../../config.php");
 
+//Query to database taking data from artist table specific artistId and put it into array and json encode it.
+
 if(isset($_POST['artistId'])) {
     $artistId = $_POST['artistId'];
 

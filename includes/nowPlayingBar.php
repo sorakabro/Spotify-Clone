@@ -1,25 +1,31 @@
 <?php 
 
+// Connection to database with query for songs and order random 10 to show and save it in array
+
 $songQuery = mysqli_query($con, "SELECT id FROM songs ORDER BY RAND() LIMIT 10");
 
 $resultArray = array();
 
+// Songquery array and push it into the result with the row id
 
 while($row = mysqli_fetch_array($songQuery)) {
     array_push($resultArray, $row['id']);
 }
 
-
+// Encode Data ResultArray to jsonArray to send it as object in javascript
 
 $jsonArray = json_encode($resultArray);
 ?>
 
 <script>
 
+//Onload page show currentplaylist, audio, track from song and volumeSoundBar with max volume
+
 $(document).ready(function() {
     currentPlayList = <?php echo $jsonArray; ?>;
     audioElement = new Audio();
     setTrack(currentPlayList[0], currentPlayList, false);
+    updateVolumeProgressBar(audioElement.audio);
 
 
     $(".playBackBar .progressBar").mousedown(function() {
@@ -37,6 +43,30 @@ $(document).ready(function() {
         timeFromOffset(e, this);
     });
 
+
+     // Volume Bar 
+    $(".volumeBar .progressBar").mousedown(function() {
+        mouseDown = true;
+    });
+
+    $(".volumeBar .progressBar").mousemove(function(e) {
+        if(mouseDown == true) {
+           
+            var percentage = e.offsetX / $(this).width();
+            if(percentage >= 0 && percentage <= 1) {
+            audioElement.audio.volume = percentage;
+        }
+        }
+    });
+
+    $(".volumeBar .progressBar").mouseup(function(e) {
+        var percentage = e.offsetX / $(this).width();
+           
+            if(percentage >= 0 && percentage <= 1) {
+            audioElement.audio.volume = percentage;
+        }
+    });
+
     $(document).mouseup(function(){
         mouseDown = false;
     });
@@ -52,6 +82,7 @@ function timeFromOffset(mouse, progressBar) {
 }
 
 
+// Function for finding trackId, Title, Artist, Path with json
 function setTrack(trackId, newPlayList, play) {
     
     $.post("includes/handlers/ajax/getSongJson.php", { songId: trackId}, function(data) {
@@ -81,6 +112,8 @@ function setTrack(trackId, newPlayList, play) {
     }
     
 }
+
+// Function playSong / pauseSong with Ajax
 
 function playSong() {
 

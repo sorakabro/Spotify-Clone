@@ -5,6 +5,8 @@ var audioElement;
 var mouseDown = false;
 
 
+//function for formatTime for the song
+
 function formatTime(seconds) {
     var time = Math.round(seconds);
     var minutes = Math.floor(time/60); // Rounds down the number
@@ -22,6 +24,8 @@ function formatTime(seconds) {
     return minutes + ":" + extraZero + seconds;
 }
 
+//function for update time progressBar 
+
 function updateTimeProgressBar(audio) {
     $(".progressTime.current").text(formatTime(audio.currentTime));
     $(".progressTime.remaining").text(formatTime(audio.duration - audio.currentTime));
@@ -29,6 +33,15 @@ function updateTimeProgressBar(audio) {
     var progress = audio.currentTime / audio.duration * 100;
     $(".playBackBar .progress").css("width", progress + "%");
 }
+
+//Function for volume prograssBar
+
+function updateVolumeProgressBar(audio) {
+    var volume = audio.volume * 100;
+    $(".volumeBar .progress").css("width", volume + "%");
+}
+
+//Function for Audio regarding play, timeupdate, volume change etc
 
 function Audio() {
 
@@ -40,13 +53,22 @@ function Audio() {
         // This refers to the object that the event was called on
         var duration = formatTime(this.duration);
         $(".progressTime.remaining").text(duration);
+        
     });
+
+    // EventListener to updateTime in the progressbar
 
     this.audio.addEventListener("timeupdate", function() {
         if(this.duration) {
             updateTimeProgressBar(this);
         }
     });
+
+    // EventListener to Volumechange progressbar
+
+    this.audio.addEventListener("volumechange", function(){
+        updateVolumeProgressBar(this);
+    }); 
 
     this.setTrack = function(track) {
         this.currentlyPlaying = track;
