@@ -61,7 +61,7 @@ function Audio() {
         this.audio.pause();
     }
 
-    this.setTime = function() {
+    this.setTime = function(seconds) {
         this.audio.currentTime = seconds;
     }
 }

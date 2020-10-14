@@ -23,11 +23,11 @@ $(document).ready(function() {
 
 
     $(".playBackBar .progressBar").mousedown(function() {
-        mousedown = true;
+        mouseDown = true;
     });
 
     $(".playBackBar .progressBar").mousemove(function(e) {
-        if(mousedown == true) {
+        if(mouseDown == true) {
             //Set time of song, depending on position of the mouse
             timeFromOffset(e, this);
         }
@@ -43,9 +43,10 @@ $(document).ready(function() {
 
 });
 
+// Function for progressbar
 
 function timeFromOffset(mouse, progressBar) {
-    var percentage = mouse.offsetX / $(this).width() * 100;
+    var percentage = mouse.offsetX / $(progressBar).width() * 100;
     var seconds = audioElement.audio.duration * (percentage / 100);
     audioElement.setTime(seconds);
 }
