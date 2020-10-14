@@ -22,10 +22,15 @@ $jsonArray = json_encode($resultArray);
 //Onload page show currentplaylist, audio, track from song and volumeSoundBar with max volume
 
 $(document).ready(function() {
-    currentPlayList = <?php echo $jsonArray; ?>;
+    var newPlayList = <?php echo $jsonArray; ?>;
     audioElement = new Audio();
-    setTrack(currentPlayList[0], currentPlayList, false);
+    setTrack(newPlayList[0], newPlayList, false);
     updateVolumeProgressBar(audioElement.audio);
+
+    //Take away so when you use progressbar or volumebar not everything is getting selected (highlighted)
+    $("#nowPlayingBarContainer").on("mousedown touchstart mousemove touchmove", function(e) {
+        e.preventDefault();
+    });
 
 
     $(".playBackBar .progressBar").mousedown(function() {
@@ -81,9 +86,102 @@ function timeFromOffset(mouse, progressBar) {
     audioElement.setTime(seconds);
 }
 
+function prevSong() {
+    if(audioElement.audio.currentTime >= 3 || currentIndex == 0) {
+        audioElement.setTime(0);
+    }
+    else {
+        currentIndex = currentIndex - 1;
+        setTrack(currentPlayList[currentIndex], currentPlayList, true);
+    }
+}
+
+// Function for nextSong if length of playlist is -1 go to first song = 0, otherwise just increase by +1
+
+function nextSong() {
+
+    if(repeat == true) {
+        audioElement.setTime(0);
+        playSong();
+        return;
+    }
+
+    if(currentIndex == currentPlayList.length -1) {
+        currentIndex = 0;
+    }
+    else {
+        currentIndex++;
+    }
+
+    var trackToPlay = shuffle ? shufflePlayList[currentIndex] : currentPlayList[currentIndex];
+    setTrack(trackToPlay, currentPlayList, true);
+}
+
+//function to repeat and change picture if its repeated or not
+
+function setRepeat() {
+    repeat = !repeat;
+    var imageName = repeat ? "repeat-active.png" : "repeat.png";
+    $(".controlButton.repeat img").attr("src", "assets/images/icons/" + imageName);
+}
+
+//function to mute volume and change picture if volume is muted or not
+
+function setMute() {
+    audioElement.audio.muted = !audioElement.audio.muted;
+    var imageName =  audioElement.audio.muted ? "volume-mute.png" : "volume.png";
+    $(".controlButton.volume img").attr("src", "assets/images/icons/" + imageName);
+}
+
+//Function shuffle
+
+function setShuffle() {
+    shuffle = !shuffle;
+    var imageName =  shuffle ? "shuffle-active.png" : "shuffle.png";
+    $(".controlButton.shuffle img").attr("src", "assets/images/icons/" + imageName);
+
+    if(shuffle == true) {
+        //Randomize playlist
+        shuffleArray(shufflePlayList);
+        currentIndex = shufflePlayList.indexOf(audioElement.currentlyPlaying.id);
+
+    }
+    else {
+        //shuffle has been deactivated 
+        //go back to regular playlist
+        currentIndex = currentPlayList.indexOf(audioElement.currentlyPlaying.id);
+    }
+}
+
+function shuffleArray(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
 
 // Function for finding trackId, Title, Artist, Path with json
 function setTrack(trackId, newPlayList, play) {
+
+    //Logic for setting up 1 currentPlayList and 1 shufflePlayList that have the same data
+    if(newPlayList != currentPlayList) {
+        currentPlayList = newPlayList;
+        shufflePlayList = currentPlayList.slice();
+        shuffleArray(shufflePlayList);
+    }
+
+    if(shuffle == true) {
+        currentIndex = shufflePlayList.indexOf(trackId);
+    }
+    else {
+        currentIndex = currentPlayList.indexOf(trackId);
+    }
+    pauseSong();
     
     $.post("includes/handlers/ajax/getSongJson.php", { songId: trackId}, function(data) {
         
@@ -104,13 +202,12 @@ function setTrack(trackId, newPlayList, play) {
         });
         
         audioElement.setTrack(track);
+
+        if(play == true) {
         playSong();
+        }
     });
 
-    if(play == true) {
-        audioElement.play();
-    }
-    
 }
 
 // Function playSong / pauseSong with Ajax
@@ -171,11 +268,11 @@ function pauseSong() {
 
         <div class="buttons">
 
-            <button class="controlButton shuffle" title="Shuffle button">
+            <button class="controlButton shuffle" title="Shuffle button" onClick="setShuffle()">
                 <img src="assets/images/icons/shuffle.png" alt="Shuffle">
             </button>
 
-            <button class="controlButton previous" title="Previous button">
+            <button class="controlButton previous" title="Previous button" onClick="prevSong()">
                 <img src="assets/images/icons/previous.png" alt="Previous">
             </button>
 
@@ -187,11 +284,11 @@ function pauseSong() {
                 <img src="assets/images/icons/pause.png" alt="Pause">
             </button>
 
-            <button class="controlButton next" title="Next button">
+            <button class="controlButton next" title="Next button" onClick="nextSong()">
                 <img src="assets/images/icons/next.png" alt="Next">
             </button>
 
-            <button class="controlButton repeat" title="Repeat button">
+            <button class="controlButton repeat" title="Repeat button" onClick="setRepeat()">
                 <img src="assets/images/icons/repeat.png" alt="Repeat">
             </button>
 
@@ -225,7 +322,7 @@ function pauseSong() {
 
         <div class="volumeBar">
 
-            <button class="controlButton volume" title="Volume Button">
+            <button class="controlButton volume" title="Volume Button" onClick="setMute()">
                 <img src="assets/images/icons/volume.png" alt="Volume button">
             </button>
 

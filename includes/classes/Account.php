@@ -9,6 +9,8 @@
             $this->errorArray = array();
         }
 
+        // Database query to check for username and passsword in database exist or not, password is getting hashed
+
         public function login($un, $pw) {
 
             $pw = md5($pw);
@@ -24,6 +26,8 @@
             }
 
         }
+
+        //function to register login information values into the database
 
         public function register($un, $fn, $ln, $em, $em2, $pw, $pw2 ) {
 
@@ -61,6 +65,7 @@
             return $result;
         }
 
+            //function for validating the correct information and lenght is getting input to the database
 
            private function validateUsername($un) {
                 
@@ -119,6 +124,8 @@
                 }
             }
             
+            // function to check so password 1 and 2 is the same and have correct values
+
             private function validatePasswords($pw, $pw2) {
             
             if($pw != $pw2) {

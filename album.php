@@ -1,4 +1,4 @@
-<?php include("includes/header.php");  
+<?php include("includes/includedFiles.php");  
 
 if(isset($_GET['id'])) {
     $albumId =  $_GET['id'];
@@ -53,7 +53,7 @@ $artist = $album->getArtist();
             echo "<li class='trackListRow'>
             
                 <div class='trackCount'>
-                    <img class='play' src='assets/images/icons/play-white.png'> 
+                    <img class='play' src='assets/images/icons/play-white.png' onClick='setTrack(\"". $albumSong->getId() . "\", tempPlayList, true)'> 
                  <span class='trackNumber'>$i</span>
                 </div>
 
@@ -71,7 +71,6 @@ $artist = $album->getArtist();
                     <span class='duration'>" . $albumSong->getDuration() . "</span>
                 </div>
             
-            
             </li>";
             
             $i = $i +1;
@@ -81,6 +80,12 @@ $artist = $album->getArtist();
         }
 
         ?>
+
+        <script>
+            var tempSongIds = '<?php echo json_encode($songIdArray); ?>';
+            tempPlayList = JSON.parse(tempSongIds);
+            console.log(tempPlayList);
+        </script>
 
 
 
@@ -96,4 +101,3 @@ $artist = $album->getArtist();
 
 
 
-<?php include("includes/footer.php");  ?>
