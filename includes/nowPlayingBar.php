@@ -20,7 +20,35 @@ $(document).ready(function() {
     currentPlayList = <?php echo $jsonArray; ?>;
     audioElement = new Audio();
     setTrack(currentPlayList[0], currentPlayList, false);
+
+
+    $(".playBackBar .progressBar").mousedown(function() {
+        mousedown = true;
+    });
+
+    $(".playBackBar .progressBar").mousemove(function(e) {
+        if(mousedown == true) {
+            //Set time of song, depending on position of the mouse
+            timeFromOffset(e, this);
+        }
+    });
+
+    $(".playBackBar .progressBar").mouseup(function(e) {
+        timeFromOffset(e, this);
+    });
+
+    $(document).mouseup(function(){
+        mouseDown = false;
+    });
+
 });
+
+
+function timeFromOffset(mouse, progressBar) {
+    var percentage = mouse.offsetX / $(this).width() * 100;
+    var seconds = audioElement.audio.duration * (percentage / 100);
+    audioElement.setTime(seconds);
+}
 
 
 function setTrack(trackId, newPlayList, play) {
@@ -43,8 +71,8 @@ function setTrack(trackId, newPlayList, play) {
             $(".albumLink img").attr("src", album.artworkPath);
         });
         
-        audioElement.setTrack(track.path);
-        audioElement.play();
+        audioElement.setTrack(track);
+        playSong();
     });
 
     if(play == true) {
@@ -54,6 +82,12 @@ function setTrack(trackId, newPlayList, play) {
 }
 
 function playSong() {
+
+    if(audioElement.audio.currentTime == 0) {
+        $.post("includes/handlers/ajax/updatePlays.php", {songId: audioElement.currentlyPlaying.id });
+    }
+    
+
     $(".controlButton.play").hide();
     $(".controlButton.pause").show();
     audioElement.play();
@@ -64,6 +98,7 @@ function pauseSong() {
     $(".controlButton.pause").hide();
     audioElement.pause();
 }
+
 
 </script>
 
