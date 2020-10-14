@@ -3,33 +3,10 @@
 include("includes/includedFiles.php");
 
 ?>
-            
 
-    <h1 class="pageHeadingBig">You might also like</h1>
 
-    <div class="gridViewContainer">
-    
-        <?php 
-
-        //Database query to show random 10 albums
-
-        $albumQuery = mysqli_query($con, "SELECT * FROM albums ORDER BY RAND() LIMIT 10");
-
-        while($row = mysqli_fetch_array($albumQuery)) {
-            echo "<div class='gridViewItem'>
-            <span  role='link' tabindex='0' onClick='openPage(\"album.php?id=" . $row['id'] . "\")' >
-                <img src='" .$row['artworkPath'] . "'>
-
-                <div class='gridViewInfo'>"
-                . $row['title'] .
-                "</div>
-
-                </span>
-            </div>";
-        }
-        ?>
-
-    </div>
+<script>openPage("browse.php")</script>
+          
 
 
 
