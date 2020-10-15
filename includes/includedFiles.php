@@ -11,7 +11,7 @@ else {
 	include("includes/footer.php");
 
 	$url = $_SERVER['REQUEST_URI'];
-    echo "<script>openPage('$url')</script>";
+	echo "<script>openPage('$url')</script>";
 	exit();
 }
 
