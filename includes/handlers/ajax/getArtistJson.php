@@ -4,14 +4,12 @@ include("../../config.php");
 //Query to database taking data from artist table specific artistId and put it into array and json encode it.
 
 if(isset($_POST['artistId'])) {
-    $artistId = $_POST['artistId'];
+	$artistId = $_POST['artistId'];
 
-    $query = mysqli_query($con, "SELECT * FROM artists WHERE id='$artistId'");
+	$query = mysqli_query($con, "SELECT * FROM artists WHERE id='$artistId'");
 
-    $resultArray = mysqli_fetch_array($query);
+	$resultArray = mysqli_fetch_array($query);
 
-    echo json_encode($resultArray);
+	echo json_encode($resultArray);
 }
-
-
 ?>
