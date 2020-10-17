@@ -52,6 +52,30 @@ function createPlaylist() {
 
 }
 
+//Function Delete playlist
+
+function deletePlaylist(playlistId) {
+
+    var prompt = confirm("Are you sure you want to delete this playlist?");
+
+    if(prompt == true) {
+        
+
+        $.post("includes/handlers/ajax/deletePlaylist.php", { playlistId: playlistId })
+		.done(function(error) {
+
+			if(error != "") {
+				alert(error);
+				return;
+			}
+
+			//do something when ajax returns
+			openPage("yourMusic.php");
+		});
+    }
+
+}
+
 //function for formatTime for the song
 
 function formatTime(seconds) {
