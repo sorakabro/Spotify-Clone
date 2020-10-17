@@ -31,22 +31,25 @@ function openPage(url) {
 //Function create new playlist
 
 function createPlaylist() {
-    console.log(userLoggedIn);
-    var popup = prompt("Please enter the name of your playlist");
+	console.log(userLoggedIn);
+	var popup = prompt("Please enter the name of your playlist");
 
-    if(popup != null) {
-        
-        $.post("includes/handlers/ajax/createPlaylist.php",  {name: popup, username: userLoggedIn}).done(function(error) {
+	if(popup != null) {
 
-            if(error != "") {
-                alert(error);
-                return;
-            }
-            //Do something when ajax returns
-            openPage("yourMusic.php");
-        });
+		$.post("includes/handlers/ajax/createPlaylist.php", { name: popup, username: userLoggedIn })
+		.done(function(error) {
 
-    }
+			if(error != "") {
+				alert(error);
+				return;
+			}
+
+			//do something when ajax returns
+			openPage("yourMusic.php");
+		});
+
+	}
+
 }
 
 //function for formatTime for the song
