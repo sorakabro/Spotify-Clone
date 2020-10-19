@@ -11,6 +11,41 @@ var shuffle = false;
 var userLoggedIn;
 var timer;
 
+
+// Hide options menu when clicked
+$(document).click(function(click) {
+    var target = $(click.target);
+
+    if(!target.hasClass("item") && !target.hasClass("optionsButton")) {
+        hideOptionsMenu();
+    }
+});
+
+// hide options menu when scroll
+$(window).scroll(function() {
+    hideOptionsMenu();
+});
+
+// ADD song to playlist and hide option menu after
+
+$(document).on("change", "select.playlist", function() {
+    var select = $(this);
+    var playlistId = select.val();
+    var songId = select.prev(".songId").val();
+
+    $.post("includes/handlers/ajax/addToPlaylist.php", { playlistId: playlistId, songId: songId})
+    .done(function(error) {
+
+        if(error != "") {
+            alert(error);
+            return;
+        }
+
+        hideOptionsMenu();
+        select.val("");
+    });
+});
+
 function openPage(url) {
 
     if(timer != null) {
@@ -26,6 +61,25 @@ function openPage(url) {
 	$("#mainContent").load(encodedUrl);
 	$("body").scrollTop(0);
 	history.pushState(null, null, url);
+}
+
+//Function remove from playlist
+
+function removeFromPlaylist(button, playlistId) {
+    var songId = $(button).prevAll(".songId").val();
+
+    $.post("includes/handlers/ajax/removeFromPlaylist.php", { playlistId: playlistId, songId: songId })
+		.done(function(error) {
+
+			if(error != "") {
+				alert(error);
+				return;
+			}
+
+			//do something when ajax returns
+			openPage("playlist.php?id=" + playlistId);
+		});
+
 }
 
 //Function create new playlist
@@ -74,6 +128,32 @@ function deletePlaylist(playlistId) {
 		});
     }
 
+}
+
+
+//function to hide options menu
+function hideOptionsMenu() {
+    var menu = $(".optionsMenu");
+    if(menu.css("display") != "none") {
+        menu.css("display", "none");
+    }
+}
+
+//function for show optionsmenu at songs
+
+function showOptionsMenu(button) {
+    var songId = $(button).prevAll(".songId").val();
+    var menu = $(".optionsMenu");
+    var menuWidth = menu.width();
+    menu.find(".songId").val(songId);
+
+    var scrollTop = $(window).scrollTop(); //Distance from top of window to top of the document
+    var elementOffset = $(button).offset().top; //Distance from top of document
+
+    var top = elementOffset - scrollTop;
+    var left = $(button).position().left;
+
+    menu.css({"top": top + "px", "left": left - menuWidth + "px", "display": "inline"});
 }
 
 //function for formatTime for the song
