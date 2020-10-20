@@ -32,12 +32,12 @@
 			return $this->owner;
         }
         public function getNumberOfSongs() {
-            $query = mysqli_query($this->con, "SELECT songId FROM playlistSongs WHERE playlistId='$this->id'");
+            $query = mysqli_query($this->con, "SELECT songId FROM playlistsongs WHERE playlistId='$this->id'");
             return mysqli_num_rows($query);
         }
 
         public function getSongIds() {
-            $query = mysqli_query($this->con, "SELECT songId FROM playlistSongs WHERE playlistId='$this->id' ORDER BY 
+            $query = mysqli_query($this->con, "SELECT songId FROM playlistsongs WHERE playlistId='$this->id' ORDER BY 
             playlistOrder ASC");
 
             $array = array();
